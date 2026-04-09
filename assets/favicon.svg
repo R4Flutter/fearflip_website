@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="FearFlip icon">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#161621" />
+      <stop offset="100%" stop-color="#07070b" />
+    </linearGradient>
+    <linearGradient id="pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff5b8f" />
+      <stop offset="100%" stop-color="#ff2d68" />
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#49ffba" />
+      <stop offset="100%" stop-color="#00f28b" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)" />
+  <path d="M26 28h44v16H42v14h22v16H42v26H26V28z" fill="url(#pink)" />
+  <path d="M72 28h18v56h16V28h18v72H72V28z" fill="url(#green)" />
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="FearFlip social preview card">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09080e" />
+      <stop offset="100%" stop-color="#130713" />
+    </linearGradient>
+    <linearGradient id="pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff5b8f" />
+      <stop offset="100%" stop-color="#ff2d68" />
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4dffc0" />
+      <stop offset="100%" stop-color="#00f28b" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="880" cy="180" r="180" fill="#ff2d68" opacity="0.16" />
+  <circle cx="260" cy="120" r="200" fill="#7d2fff" opacity="0.16" />
+  <text x="76" y="176" font-size="96" font-family="Anton, sans-serif" fill="url(#pink)">FEAR</text>
+  <text x="334" y="176" font-size="96" font-family="Anton, sans-serif" fill="url(#green)">FLIP</text>
+  <text x="76" y="312" font-size="118" font-family="Anton, sans-serif" fill="#f4f3f7">YOU WON'T</text>
+  <text x="76" y="426" font-size="118" font-family="Anton, sans-serif" fill="#f4f3f7">SURVIVE THIS</text>
+  <text x="76" y="540" font-size="118" font-family="Anton, sans-serif" fill="#f4f3f7">GAME.</text>
+</svg>

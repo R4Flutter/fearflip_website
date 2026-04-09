@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="FearFlip hero art">
+  <defs>
+    <radialGradient id="redGlow" cx="70%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#ff4f86" stop-opacity="0.8" />
+      <stop offset="45%" stop-color="#ff2d68" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#ff2d68" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="violetGlow" cx="35%" cy="22%" r="45%">
+      <stop offset="0%" stop-color="#7d2fff" stop-opacity="0.55" />
+      <stop offset="55%" stop-color="#7d2fff" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#7d2fff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="hood" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#191923" />
+      <stop offset="50%" stop-color="#09090d" />
+      <stop offset="100%" stop-color="#1b0d18" />
+    </linearGradient>
+    <linearGradient id="visor" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d0f15" />
+      <stop offset="50%" stop-color="#1a1f29" />
+      <stop offset="100%" stop-color="#0d0f15" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="transparent" />
+  <circle cx="850" cy="320" r="320" fill="url(#redGlow)" />
+  <circle cx="350" cy="260" r="320" fill="url(#violetGlow)" />
+  <path d="M596 120c-170 12-312 182-350 422-41 257 8 498 104 622h484c96-124 145-365 104-622C900 302 758 132 596 120z" fill="url(#hood)" />
+  <path d="M404 336c36-108 110-172 192-172s156 64 192 172l34 136c21 82 9 153-37 214-43 58-105 87-189 87s-146-29-189-87c-46-61-58-132-37-214l34-136z" fill="#050509" />
+  <path d="M446 430c41-52 96-78 150-78 55 0 109 26 151 78v48c-45 31-95 47-151 47-55 0-105-16-150-47v-48z" fill="url(#visor)" opacity="0.88" />
+  <ellipse cx="524" cy="452" rx="50" ry="62" fill="#131620" stroke="#43485a" stroke-width="9" opacity="0.9" />
+  <ellipse cx="670" cy="452" rx="50" ry="62" fill="#131620" stroke="#43485a" stroke-width="9" opacity="0.9" />
+  <path d="M574 447h46" stroke="#626a7d" stroke-width="10" stroke-linecap="round" />
+  <ellipse cx="516" cy="444" rx="20" ry="25" fill="#d8d6ff" opacity="0.88" />
+  <ellipse cx="678" cy="444" rx="20" ry="25" fill="#ffd7e5" opacity="0.68" />
+  <path d="M476 640c37-49 83-74 120-74 38 0 84 25 121 74" fill="none" stroke="#1b0f16" stroke-width="20" stroke-linecap="round" />
+  <path d="M476 640c37-23 83-35 120-35 38 0 84 12 121 35" fill="none" stroke="#340f21" stroke-width="8" stroke-linecap="round" opacity="0.65" />
+  <rect x="152" y="332" width="76" height="76" fill="none" stroke="#f3e8ff" stroke-width="4" opacity="0.45" />
+  <rect x="928" y="292" width="28" height="28" fill="none" stroke="#8d45ff" stroke-width="4" opacity="0.45" />
+  <rect x="830" y="154" width="64" height="64" fill="none" stroke="#6630d8" stroke-width="4" opacity="0.45" />
+</svg>

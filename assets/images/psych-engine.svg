@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="FearFlip psychological engine art">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09080e" />
+      <stop offset="100%" stop-color="#120712" />
+    </linearGradient>
+    <linearGradient id="glitchPink" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff214f" />
+      <stop offset="100%" stop-color="#ff4797" />
+    </linearGradient>
+    <linearGradient id="glitchPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6a1aff" />
+      <stop offset="100%" stop-color="#bf44ff" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)" />
+  <path d="M352 134l132 86 116 116-80 80-176-112-72-140z" fill="url(#glitchPurple)" />
+  <path d="M848 134l-132 86-116 116 80 80 176-112 72-140z" fill="url(#glitchPurple)" />
+  <path d="M296 456l172 74 132 100-172 78-156-90z" fill="url(#glitchPink)" />
+  <path d="M904 456l-172 74-132 100 172 78 156-90z" fill="url(#glitchPink)" />
+  <path d="M470 352l130 76 130-76-48 206-82 42-82-42z" fill="#05050a" />
+</svg>
