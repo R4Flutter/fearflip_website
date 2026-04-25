@@ -58,14 +58,35 @@ export function renderGameplaySection() {
         <div class="gameplay-layout">
           <article class="panel preview-card preview-card--hero reveal">
             <div class="preview-card__media">
-              <img
-                src="/assets/images/app_basic_gameplay.jpeg"
-                alt="FearFlip maze gameplay screenshot"
-              />
-            </div>
-            <div class="preview-card__label">
-              <div class="preview-card__kicker mono">Live Gameplay</div>
-              <div class="preview-card__title">The Maze Changes In Real Time While You Run</div>
+              <div class="maze-game-card" data-maze-preview>
+                <div class="maze-frame">
+                  <div class="maze-stage">
+                    <img
+                      class="maze-image"
+                      src="/assets/images/app_basic_gameplay.jpeg"
+                      alt="FearFlip gameplay preview"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+
+                <div class="maze-hook">
+                  <h3 class="maze-hook__title">One wrong turn and the Devil catches you.</h3>
+                  <p class="maze-hook__copy">
+                    Get early access before public launch and secure your spot for the first FearFlip build.
+                  </p>
+                  <button
+                    class="maze-cta-button"
+                    type="button"
+                    data-scroll-target="#final-signup"
+                    data-track-click="maze_preview_early_access"
+                  >
+                    Reserve Early Access
+                  </button>
+                  <p class="maze-controls-text">Limited pre-launch slots. Join now before the list fills.</p>
+                </div>
+              </div>
             </div>
           </article>
 
