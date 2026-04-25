@@ -1,14 +1,14 @@
 :root {
-  --bg: #07070b;
-  --bg-elevated: #0d0d14;
-  --bg-card: rgba(18, 18, 28, 0.88);
+  --bg: #06070b;
+  --bg-elevated: #0c0f14;
+  --bg-card: rgba(17, 19, 26, 0.88);
   --text: #f4f3f7;
-  --text-muted: #b8b4c7;
+  --text-muted: #c3becf;
   --text-soft: rgba(244, 243, 247, 0.62);
-  --danger: #ff2d68;
-  --danger-bright: #ff4f86;
-  --neon: #7d2fff;
-  --green: #00f28b;
+  --danger: #ff2a2a;
+  --danger-bright: #c40024;
+  --neon: #1a0000;
+  --green: #21d3ff;
   --line: rgba(255, 255, 255, 0.1);
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
   --radius-sm: 16px;
@@ -16,6 +16,8 @@
   --container: min(1180px, calc(100vw - 32px));
   --header-height: 88px;
   --transition: 220ms ease;
+  --headline-tracking: 0.014em;
+  --display-tracking: 0.03em;
 }
 
 *,
@@ -34,9 +36,10 @@ body {
   color: var(--text);
   font-family: "Space Grotesk", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(125, 47, 255, 0.16), transparent 32%),
-    radial-gradient(circle at top right, rgba(255, 45, 104, 0.14), transparent 30%),
-    linear-gradient(180deg, #07070b 0%, #05050a 42%, #07070b 100%);
+    radial-gradient(circle at 10% 12%, rgba(248, 78, 76, 0.16), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(33, 211, 255, 0.12), transparent 33%),
+    radial-gradient(circle at 40% 110%, rgba(255, 36, 83, 0.18), transparent 40%),
+    linear-gradient(180deg, #06070b 0%, #05060b 42%, #070810 100%);
   overflow-x: hidden;
 }
 
@@ -149,9 +152,14 @@ h3 {
   text-transform: uppercase;
 }
 
+.section-title,
+.display-title {
+  text-wrap: balance;
+}
+
 .section-title {
-  letter-spacing: -0.03em;
-  line-height: 0.94;
+  letter-spacing: var(--headline-tracking);
+  line-height: 1;
 }
 
 .section-copy {
@@ -218,6 +226,8 @@ h3 {
 .glitch-word {
   position: relative;
   display: inline-block;
+  letter-spacing: 0.055em;
+  word-spacing: 0;
 }
 
 .glitch-word::before,
@@ -241,11 +251,18 @@ h3 {
 }
 
 .accent-text {
-  color: var(--danger);
+  background: linear-gradient(90deg, #ff2a2a, #c40024, #1a0000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .accent-text--green {
   color: var(--green);
+}
+
+.accent-text--white {
+  color: #ffffff;
 }
 
 .noscript-shell {
@@ -260,7 +277,7 @@ h3 {
   margin-bottom: 16px;
   font-family: "Anton", sans-serif;
   font-size: clamp(3rem, 8vw, 6rem);
-  letter-spacing: -0.04em;
+  letter-spacing: 0.025em;
 }
 
 @media (max-width: 920px) {

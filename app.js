@@ -1,5 +1,6 @@
 import { renderLandingPage } from "./landing_page.js";
 import {
+  fetchWaitlistStats,
   flushQueuedEvents,
   isValidEmail,
   submitWaitlist,
@@ -173,14 +174,38 @@ function initSectionTracking() {
 
 function initMobileSticky() {
   const sticky = document.querySelector("[data-mobile-sticky]");
+  const finalCapture = document.querySelector("#final-capture");
 
   if (!sticky) {
     return;
   }
 
+  const setStickyState = (visible) => {
+    sticky.classList.toggle("is-visible", visible);
+    document.body.classList.toggle("has-mobile-sticky", visible);
+  };
+
   const onScroll = () => {
-    const shouldShow = window.innerWidth <= 720 && window.scrollY > 480;
-    sticky.classList.toggle("is-visible", shouldShow);
+    const isMobile = window.innerWidth <= 720;
+
+    if (!isMobile) {
+      setStickyState(false);
+      return;
+    }
+
+    const doc = document.documentElement;
+    const scrollableHeight = Math.max(doc.scrollHeight - window.innerHeight, 1);
+    const progress = window.scrollY / scrollableHeight;
+    const hasReachedLaterSections = progress > 0.58;
+
+    let nearFinalCapture = false;
+
+    if (finalCapture instanceof HTMLElement) {
+      const finalRect = finalCapture.getBoundingClientRect();
+      nearFinalCapture = finalRect.top <= window.innerHeight * 0.9;
+    }
+
+    setStickyState(hasReachedLaterSections && !nearFinalCapture);
   };
 
   onScroll();
@@ -211,6 +236,98 @@ function initScrollMilestones() {
   };
 
   window.addEventListener("scroll", onScroll, { passive: true });
+}
+
+function initHeroMotion() {
+  const hero = document.querySelector("[data-hero]");
+
+  if (!(hero instanceof HTMLElement)) {
+    return;
+  }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  let frameId = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
+  const render = () => {
+    currentX += (targetX - currentX) * 0.12;
+    currentY += (targetY - currentY) * 0.12;
+
+    hero.style.setProperty("--hero-parallax-x", `${currentX.toFixed(2)}px`);
+    hero.style.setProperty("--hero-parallax-y", `${currentY.toFixed(2)}px`);
+
+    if (Math.abs(targetX - currentX) > 0.08 || Math.abs(targetY - currentY) > 0.08) {
+      frameId = window.requestAnimationFrame(render);
+    } else {
+      frameId = 0;
+    }
+  };
+
+  const requestRender = () => {
+    if (!frameId) {
+      frameId = window.requestAnimationFrame(render);
+    }
+  };
+
+  const handlePointerMove = (event) => {
+    const bounds = hero.getBoundingClientRect();
+    const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5;
+
+    targetX = relativeX * 26;
+    targetY = relativeY * 22;
+    requestRender();
+  };
+
+  const handleScroll = () => {
+    const scrollInfluence = Math.max(-12, Math.min(12, window.scrollY * -0.015));
+    targetY = scrollInfluence;
+    requestRender();
+  };
+
+  const resetPointer = () => {
+    targetX = 0;
+    handleScroll();
+  };
+
+  hero.addEventListener("pointermove", handlePointerMove);
+  hero.addEventListener("pointerleave", resetPointer);
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat("en-US").format(value);
+}
+
+async function initWaitlistCount() {
+  const nodes = document.querySelectorAll("[data-waitlist-count]");
+
+  if (!nodes.length) {
+    return;
+  }
+
+  try {
+    const totalEntries = await fetchWaitlistStats();
+
+    if (totalEntries <= 0) {
+      return;
+    }
+
+    const message = `${formatNumber(totalEntries)}+ players already on the waitlist`;
+
+    nodes.forEach((node) => {
+      node.textContent = message;
+    });
+  } catch (error) {
+    console.warn("Unable to load waitlist stats.", error);
+  }
 }
 
 async function handleFormSubmit(event) {
@@ -247,6 +364,12 @@ async function handleFormSubmit(event) {
       trackEvent("waitlist_duplicate_detected", { source });
     } else if (error.code === "invalid_email") {
       setFormStatus(form, "is-error", "Enter a valid email address to join the FearFlip waitlist.");
+    } else if (error.code === "backend_unavailable") {
+      setFormStatus(form, "is-error", "Waitlist storage is temporarily unavailable. Please try again in a moment.");
+      trackEvent("waitlist_submit_failed", {
+        source,
+        reason: "backend_unavailable",
+      });
     } else {
       setFormStatus(form, "is-error", "Something went wrong while saving your slot. Please try again.");
       trackEvent("waitlist_submit_failed", {
@@ -288,11 +411,13 @@ async function bootstrap() {
   setHeaderState();
   trackClicks();
   initRevealObserver();
+  initHeroMotion();
   initSectionTracking();
   initMobileSticky();
   initScrollMilestones();
   initForms();
   initLifecycleTracking();
+  void initWaitlistCount();
   await flushQueuedEvents();
 }
 

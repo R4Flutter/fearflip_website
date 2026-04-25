@@ -1,28 +1,45 @@
 const featureCards = [
   {
     modifier: "",
-    icon: "⚡",
-    title: "Reality Distortion",
-    copy: "Reality flips mid-game. What was up is now down.",
+    icon: "FX",
+    title: "Dynamic Maze Flipping",
+    copy: "Turn walls into paths, paths into walls, and create emergency exits in real time.",
   },
   {
     modifier: "feature-card--purple",
-    icon: "◉",
-    title: "Adaptive AI",
-    copy: "Controls become unpredictable. Trust nothing.",
+    icon: "DV",
+    title: "Relentless Devil Chase",
+    copy: "The Devil hunts constantly, punishes hesitation, and accelerates in higher levels.",
   },
   {
     modifier: "feature-card--green",
-    icon: "⌁",
-    title: "The Hunter",
-    copy: "A hidden entity studies your routes and closes the gap.",
+    icon: "PR",
+    title: "Procedural Mazes",
+    copy: "No run is the same. Every route, chase, and close call feels fresh.",
   },
   {
     modifier: "",
-    icon: "∆",
-    title: "No Safe Zone",
-    copy: "Safe rooms collapse, patterns shift, and panic becomes part of play.",
+    icon: "SK",
+    title: "High Skill Gameplay",
+    copy: "Reflexes, timing, and strategy decide survival when pressure peaks.",
   },
+];
+
+const flipFunctions = [
+  "Turn walls into paths",
+  "Turn paths into walls",
+  "Create emergency escape routes",
+  "Trap the Devil temporarily",
+  "Open shortcuts to the safe zone",
+  "Break dead-end situations",
+];
+
+const devilTraits = [
+  "Never stops chasing",
+  "Punishes hesitation",
+  "Gets faster in higher levels",
+  "Creates constant pressure",
+  "Turns every second into panic",
 ];
 
 export function renderGameplaySection() {
@@ -30,8 +47,12 @@ export function renderGameplaySection() {
     <section class="section" id="gameplay" data-track-section="gameplay">
       <div class="container">
         <div class="reveal" style="margin-bottom: 32px;">
-          <div class="eyebrow">Gameplay Preview</div>
-          <h2 class="section-title" style="font-size: clamp(3.2rem, 9vw, 6.2rem);">Every Level Is A New Nightmare</h2>
+          <div class="eyebrow">Core Loop</div>
+          <h2 class="section-title" style="font-size: clamp(3.2rem, 9vw, 6.2rem);">Spawn. Flip. Escape. Repeat.</h2>
+          <p class="section-copy" style="margin-top: 18px; max-width: 72ch;">
+            You spawn inside a procedurally generated labyrinth and must reach the safe zone before the Devil catches you.
+            One smart flip can save your run. One bad flip can destroy your route.
+          </p>
         </div>
 
         <div class="gameplay-layout">
@@ -44,16 +65,7 @@ export function renderGameplaySection() {
             </div>
             <div class="preview-card__label">
               <div class="preview-card__kicker mono">Live Gameplay</div>
-              <div class="preview-card__title">Maze Logic That Punishes Comfort</div>
-            </div>
-          </article>
-
-          <article class="panel preview-card preview-card--art reveal">
-            <div class="preview-card__media">
-              <img
-                src="/assets/images/app_dashboard%20.jpeg"
-                alt="FearFlip game menu screenshot"
-              />
+              <div class="preview-card__title">The Maze Changes In Real Time While You Run</div>
             </div>
           </article>
 
@@ -70,6 +82,28 @@ export function renderGameplaySection() {
               `,
             )
             .join("")}
+        </div>
+
+        <div class="gameplay-detail-grid">
+          <article class="panel gameplay-detail reveal">
+            <h3 class="feature-card__title">The Flip System</h3>
+            <p class="feature-card__copy">
+              FearFlip's signature mechanic lets you manipulate the maze itself. Timing matters because one reckless move can block your own escape.
+            </p>
+            <div class="final-card__list">
+              ${flipFunctions.map((item) => `<span>${item}</span>`).join("")}
+            </div>
+          </article>
+
+          <article class="panel gameplay-detail reveal">
+            <h3 class="feature-card__title">The Devil</h3>
+            <p class="feature-card__copy">
+              This AI enemy is relentless. It does not wait, it does not forgive, and it turns every moment into a pressure test.
+            </p>
+            <div class="final-card__list">
+              ${devilTraits.map((item) => `<span>${item}</span>`).join("")}
+            </div>
+          </article>
         </div>
       </div>
     </section>

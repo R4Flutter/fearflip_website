@@ -14,9 +14,21 @@ const allowedOriginPatterns = [
   /^http:\/\/localhost(?::\d+)?$/i,
   /^http:\/\/127\.0\.0\.1(?::\d+)?$/i,
 ];
+const extraAllowedOrigins = String(process.env.FEARFLIP_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim().toLowerCase())
+  .filter(Boolean);
 
 function allowOrigin(origin) {
-  return Boolean(origin && allowedOriginPatterns.some((pattern) => pattern.test(origin)));
+  if (!origin) {
+    return false;
+  }
+
+  if (allowedOriginPatterns.some((pattern) => pattern.test(origin))) {
+    return true;
+  }
+
+  return extraAllowedOrigins.includes(origin.toLowerCase());
 }
 
 function setCorsHeaders(req, res) {
@@ -27,8 +39,8 @@ function setCorsHeaders(req, res) {
     res.set("Vary", "Origin");
   }
 
-  res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.set("Access-Control-Allow-Headers", "Content-Type");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type, X-Admin-Key");
 }
 
 function sanitizeString(value, maxLength = 512) {
@@ -71,6 +83,24 @@ function hashValue(value) {
 
 function createJsonResponse(res, statusCode, body) {
   res.status(statusCode).set("Cache-Control", "no-store").json(body);
+}
+
+function isAuthorizedAdmin(req) {
+  const expectedKey = String(process.env.FEARFLIP_ADMIN_KEY || "").trim();
+  const providedKey = sanitizeString(req.get("x-admin-key"), 200);
+
+  if (!expectedKey || !providedKey) {
+    return false;
+  }
+
+  const expectedBuffer = Buffer.from(expectedKey);
+  const providedBuffer = Buffer.from(providedKey);
+
+  if (expectedBuffer.length !== providedBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expectedBuffer, providedBuffer);
 }
 
 async function handleWaitlistSubmission(req, res) {
@@ -154,6 +184,65 @@ async function handleTrackEvent(req, res) {
   }
 }
 
+async function handleWaitlistStats(req, res) {
+  try {
+    const statsSnapshot = await db.collection("waitlistEntries").count().get();
+
+    return createJsonResponse(res, 200, {
+      ok: true,
+      totalEntries: statsSnapshot.data().count || 0,
+    });
+  } catch (error) {
+    logger.error("waitlist_stats_failed", error);
+    return createJsonResponse(res, 500, {
+      code: "server_error",
+      message: "Unable to read waitlist stats right now.",
+    });
+  }
+}
+
+async function handleAdminWaitlist(req, res) {
+  if (!isAuthorizedAdmin(req)) {
+    return createJsonResponse(res, 401, {
+      code: "unauthorized",
+      message: "A valid admin key is required.",
+    });
+  }
+
+  const parsedLimit = Number.parseInt(sanitizeString(req.query?.limit, 4), 10);
+  const limit = Number.isFinite(parsedLimit) ? Math.min(Math.max(parsedLimit, 1), 500) : 200;
+
+  try {
+    const snapshot = await db
+      .collection("waitlistEntries")
+      .orderBy("createdAt", "desc")
+      .limit(limit)
+      .get();
+
+    const entries = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        email: sanitizeString(data.email, 180),
+        source: sanitizeString(data.source, 40),
+        landingPath: sanitizeString(data.landingPath, 200),
+        createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : null,
+      };
+    });
+
+    return createJsonResponse(res, 200, {
+      ok: true,
+      count: entries.length,
+      entries,
+    });
+  } catch (error) {
+    logger.error("waitlist_admin_fetch_failed", error);
+    return createJsonResponse(res, 500, {
+      code: "server_error",
+      message: "Unable to fetch the waitlist right now.",
+    });
+  }
+}
+
 exports.api = onRequest(
   {
     region: "us-central1",
@@ -169,22 +258,56 @@ exports.api = onRequest(
       return;
     }
 
-    if (req.method !== "POST") {
-      createJsonResponse(res, 405, {
-        code: "method_not_allowed",
-        message: "Only POST requests are allowed.",
-      });
+    const routePath = buildRoutePath(req);
+
+    if (routePath === "/waitlist/stats") {
+      if (req.method !== "GET") {
+        createJsonResponse(res, 405, {
+          code: "method_not_allowed",
+          message: "Only GET requests are allowed for this endpoint.",
+        });
+        return;
+      }
+
+      await handleWaitlistStats(req, res);
       return;
     }
 
-    const routePath = buildRoutePath(req);
+    if (routePath === "/admin/waitlist") {
+      if (req.method !== "GET") {
+        createJsonResponse(res, 405, {
+          code: "method_not_allowed",
+          message: "Only GET requests are allowed for this endpoint.",
+        });
+        return;
+      }
+
+      await handleAdminWaitlist(req, res);
+      return;
+    }
 
     if (routePath === "/waitlist") {
+      if (req.method !== "POST") {
+        createJsonResponse(res, 405, {
+          code: "method_not_allowed",
+          message: "Only POST requests are allowed for this endpoint.",
+        });
+        return;
+      }
+
       await handleWaitlistSubmission(req, res);
       return;
     }
 
     if (routePath === "/track") {
+      if (req.method !== "POST") {
+        createJsonResponse(res, 405, {
+          code: "method_not_allowed",
+          message: "Only POST requests are allowed for this endpoint.",
+        });
+        return;
+      }
+
       await handleTrackEvent(req, res);
       return;
     }

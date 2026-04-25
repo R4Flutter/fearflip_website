@@ -2,6 +2,84 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isRequiredString(value, maxLength) {
+      return value is string && value.size() > 0 && value.size() <= maxLength;
+    }
+
+    function isOptionalString(value, maxLength) {
+      return value == null || (value is string && value.size() <= maxLength);
+    }
+
+    function isValidEmail(value) {
+      return value is string
+        && value.size() <= 180
+        && value.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+    }
+
+    function isValidWaitlistPayload(data) {
+      return data.keys().hasAll([
+          'email',
+          'source',
+          'landingPath',
+          'referrer',
+          'locale',
+          'userAgent',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'email',
+          'source',
+          'landingPath',
+          'referrer',
+          'locale',
+          'userAgent',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidEmail(data.email)
+        && isRequiredString(data.source, 40)
+        && isRequiredString(data.landingPath, 200)
+        && isOptionalString(data.referrer, 300)
+        && isOptionalString(data.locale, 140)
+        && isOptionalString(data.userAgent, 400)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAnalyticsPayload(data) {
+      return data.keys().hasAll([
+          'name',
+          'routePath',
+          'referrer',
+          'userAgent',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'name',
+          'routePath',
+          'referrer',
+          'userAgent',
+          'createdAt'
+        ])
+        && isRequiredString(data.name, 80)
+        && isRequiredString(data.routePath, 200)
+        && isOptionalString(data.referrer, 300)
+        && isOptionalString(data.userAgent, 400)
+        && data.createdAt is timestamp;
+    }
+
+    match /waitlistEntries/{entryId} {
+      allow get: if true;
+      allow create: if isValidWaitlistPayload(request.resource.data);
+      allow list, update, delete: if false;
+    }
+
+    match /analyticsEvents/{eventId} {
+      allow create: if isValidAnalyticsPayload(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

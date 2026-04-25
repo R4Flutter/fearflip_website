@@ -1,74 +1,84 @@
-const identities = [
-  { initials: "GX", name: "@ghostrunner_x" },
-  { initials: "MA", name: "@maze_addict" },
-  { initials: "DP", name: "@dark_player99" },
+const characterShowcase = [
+  { initials: "KN", name: "Knight" },
+  { initials: "SW", name: "Shadow Warrior" },
+  { initials: "RD", name: "Raider" },
+  { initials: "RG", name: "Rogue" },
+  { initials: "MF", name: "Mystic Fighter" },
 ];
 
-const quotes = [
+const featureHighlights = [
   {
-    quote: "This game messes with your brain.",
-    author: "@ghostrunner_x",
-    rating: "4.9 chaos score",
+    quote: "Dynamic Maze Flipping",
+    author: "Core Feature",
+    rating: "Change the map in real time and build your own survival path.",
   },
   {
-    quote: "I couldn't stop playing even after losing 20 times.",
-    author: "@maze_addict",
-    rating: "Top 1% retention",
+    quote: "Relentless Devil Chase",
+    author: "Core Feature",
+    rating: "The Devil never stops hunting and punishes hesitation.",
   },
   {
-    quote: "It feels unfair... but I keep coming back.",
-    author: "@dark_player99",
-    rating: "Obsessive replay loop",
+    quote: "Procedural Mazes",
+    author: "Core Feature",
+    rating: "Every run is unique. No memorized route can save you.",
+  },
+  {
+    quote: "High Skill Gameplay",
+    author: "Core Feature",
+    rating: "Reflexes, timing, and strategy decide who survives.",
   },
 ];
 
 export function renderSocialProofSection() {
   return `
-    <section class="section section--dark" id="proof" data-track-section="social-proof">
+    <section class="section section--dark" id="features" data-track-section="features">
       <div class="container">
         <div class="stats-grid">
           <article class="panel stat-card reveal">
-            <div class="stat-card__value">100+</div>
-            <div class="stat-card__label mono">Brutal Levels</div>
+            <div class="stat-card__value">100</div>
+            <div class="stat-card__label mono">Target Level</div>
           </article>
           <article class="panel stat-card reveal">
-            <div class="stat-card__value">10K+</div>
-            <div class="stat-card__label mono">Test Subjects</div>
+            <div class="stat-card__value">1</div>
+            <div class="stat-card__label mono">Bad Flip To Fail</div>
           </article>
           <article class="panel stat-card reveal">
-            <div class="stat-card__value">&lt;1%</div>
-            <div class="stat-card__label mono">Survival Rate</div>
+            <div class="stat-card__value">INF</div>
+            <div class="stat-card__label mono">Replay Value</div>
           </article>
         </div>
 
         <div class="section-heading reveal">
-          <div class="eyebrow">Not For Casual Players</div>
-          <h2 class="section-title">Insanely Addictive Gameplay</h2>
+          <div class="eyebrow">FearFlip Features</div>
+          <h2 class="section-title">Run Fast. Think Faster.</h2>
+          <p class="section-copy" style="margin-top: 18px;">
+            FearFlip drops you into a brutal chase where the maze keeps changing and panic is part of the design.
+          </p>
         </div>
 
-        <div class="identity-strip">
-          ${identities
+        <div class="quote-grid">
+          ${featureHighlights
             .map(
-              (identity) => `
-                <article class="panel identity-card reveal">
-                  <span class="avatar-badge">${identity.initials}</span>
-                  <div class="identity-card__name mono">${identity.name}</div>
+              (feature) => `
+                <article class="panel quote-card reveal">
+                  <p class="quote-card__copy">${feature.quote}</p>
+                  <div class="quote-card__footer mono">
+                    <span>${feature.author}</span>
+                    <span>${feature.rating}</span>
+                  </div>
                 </article>
               `,
             )
             .join("")}
         </div>
 
-        <div class="quote-grid">
-          ${quotes
+        <div class="identity-strip">
+          ${characterShowcase
             .map(
-              (quote) => `
-                <article class="panel quote-card reveal">
-                  <p class="quote-card__copy">"${quote.quote}"</p>
-                  <div class="quote-card__footer mono">
-                    <span>${quote.author}</span>
-                    <span>${quote.rating}</span>
-                  </div>
+              (character) => `
+                <article class="panel identity-card reveal">
+                  <span class="avatar-badge">${character.initials}</span>
+                  <div class="identity-card__name mono">${character.name}</div>
                 </article>
               `,
             )
